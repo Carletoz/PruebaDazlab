@@ -1,3 +1,4 @@
+import CreatePokemonDto from "../dto/createPokemonDto";
 import Pokemon from "../models/Pokemon";
 
 export const getPokemonsService = async () => {
@@ -33,5 +34,39 @@ export const getPokemonsService = async () => {
     }
   } catch (error) {
     console.error("Error al guardar los pokemons:", error);
+  }
+};
+
+export const createPokemonService = async (pokemon: CreatePokemonDto) => {
+  try {
+    if (pokemon.name && pokemon.url && pokemon.type) {
+      const newPokemon = await Pokemon.create(pokemon);
+      return newPokemon;
+    } else {
+      throw new Error("Todos los campos son requeridos");
+    }
+  } catch (error: any) {
+    return { error: error.message };
+  }
+};
+
+export const updatePokemonService = async (
+  id: string,
+  pokemon: CreatePokemonDto
+) => {
+  try {
+    const results = await Pokemon.findByIdAndUpdate(id, pokemon);
+    return results;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deletePokemonService = async (id: number) => {
+  try {
+    const results = await Pokemon.findByIdAndDelete(id);
+    return results;
+  } catch (error) {
+    console.log(error);
   }
 };

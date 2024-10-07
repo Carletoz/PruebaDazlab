@@ -6,7 +6,7 @@ const AutoIncrement = AutoIncrementFactory(mongoose);
 const PokemonSchema = new Schema({
   _id: Number,
   name: String,
-  type: [String], // Cambiado a un array de strings
+  type: [String],
   url: String,
 }, { versionKey: false }); 
 PokemonSchema.plugin(AutoIncrement, { inc_field: '_id' });
