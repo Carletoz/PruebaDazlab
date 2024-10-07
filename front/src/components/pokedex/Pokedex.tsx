@@ -1,6 +1,7 @@
 import pokedex from "../../assets/pokedex.png";
 import styles from "./Pokedex.module.css";
 import charizard1  from "../../assets/charizard1.png";
+import Form from "../form/Form";
 
 
 const Pokedex = () => {
@@ -13,15 +14,13 @@ const Pokedex = () => {
       </div>
 
     <div className={styles.form}>
-        <p>1. INGRESAR UN POKEMON</p>
-        <p>2. SELECCIONAR UN POKEMON</p>
-        <p>3. OBTENER INFORMACION</p>
+       <Form/>
     </div>
 
     <div className={styles.numbers}>
     {Array.from({ length: 10 }, (_, i) => (
        <button>
-            
+
        <p key={i}>{(i + 1) % 10}</p>
        </button>
     ))}

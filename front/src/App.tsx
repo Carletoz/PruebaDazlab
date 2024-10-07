@@ -1,9 +1,9 @@
-import Pokedex from "./components/pokedex/Pokedex";
+import Home from "./views/Home";
 
 const App = () => {
   return (
     <div>
-      <Pokedex />
+      <Home />
     </div>
   );
 };

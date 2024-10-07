@@ -28,13 +28,15 @@
 
 .form {
   position: absolute;
-  top: 32%;
-  left: 57%;
+  top: 32.5%;
+  left: 56.7%;
   font-size: 20px;
   font-weight: bold;
+  height: 7.3rem;
+  width: 19.5rem;
 }
 
-.form p {
+.form >* {
   color: white;
   font-size: 0.8rem;
   font-weight: bold;
@@ -53,7 +55,7 @@
   grid-template-rows: repeat(2, 1fr);
 }
 
-.numbers button > p {
+.numbers button > * {
   margin: 0;
   padding: 0;
 }
