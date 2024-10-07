@@ -31,7 +31,7 @@
   top: 32%;
   left: 57%;
   font-size: 20px;
-  font-weight: bold; 
+  font-weight: bold;
 }
 
 .form p {
@@ -43,20 +43,32 @@
 
 .numbers {
   font-family: "Anton", sans-serif;
-  color: rgb(255, 251, 0);
   position: absolute;
-  top: 54%;
-  left: 56.5rem;
-  column-gap: 3.35rem;
-  row-gap: 1.5rem;
+  top: 23rem;
+  left: 55.3rem;
+  column-gap: 0.8rem;
+  row-gap: 0.25rem;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(2, 1fr);
 }
 
-.numbers p {
+.numbers button > p {
   margin: 0;
   padding: 0;
 }
 
- 
+.numbers button {
+  background-color: transparent;
+  color: rgb(255, 251, 0); 
+  cursor: pointer;
+  height: 2.5rem;
+  width: 3rem;
+  border: none;
+}
+
+.numbers button:hover {
+  color: rgb(0, 128, 255); /* Cambia el color a un azul */
+  transform: scale(1.2) rotate(5deg); /* Aumenta el tamaño y rota ligeramente */
+  transition: transform 0.3s ease-in-out, color 0.3s ease-in-out; /* Suaviza la transición */
+}

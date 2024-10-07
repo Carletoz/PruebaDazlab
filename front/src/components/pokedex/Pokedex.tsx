@@ -20,7 +20,10 @@ const Pokedex = () => {
 
     <div className={styles.numbers}>
     {Array.from({ length: 10 }, (_, i) => (
-        <p key={i}>{(i + 1) % 10}</p>
+       <button>
+            
+       <p key={i}>{(i + 1) % 10}</p>
+       </button>
     ))}
     </div>
 
