@@ -1,0 +1,28 @@
+.pokedex {
+  position: relative;
+}
+.pokedex img {
+  width: 100vw;
+  height: 99vh;
+  object-fit: contain;
+}
+
+.screen {
+  position: absolute;
+  top: 29.5%;
+  left: 24.8%;
+  width: 20%;
+  height: 29%;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+
+.screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;  
+  z-index: -100;
+  background-color: #B9D4D4;
+  
+}
