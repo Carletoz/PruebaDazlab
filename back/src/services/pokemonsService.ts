@@ -1,12 +1,13 @@
 import CreatePokemonDto from "../dto/createPokemonDto";
+import IPokemon from "../interfaces/Ipokemon";
 import Pokemon from "../models/Pokemon";
 
-export const getPokemonsService = async () => {
+export const getPokemonsService = async (): Promise<IPokemon[] | undefined> => {
   try {
     const pokemonsDB = await Pokemon.find();
 
     if (pokemonsDB.length > 0) {
-      return pokemonsDB;
+      return pokemonsDB as IPokemon[];
     } else {
       const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=5");
       const data = (await response.json()) as { results: any[] };
@@ -34,6 +35,32 @@ export const getPokemonsService = async () => {
     }
   } catch (error) {
     console.error("Error al guardar los pokemons:", error);
+  }
+};
+
+export const getPokemonByNameService = async (name: string): Promise<IPokemon> => {
+  try {
+    const pokemon: IPokemon | null = await Pokemon.findOne({ name });
+    if (!pokemon) {
+      throw new Error("Pokemon no encontrado");
+    } else {
+      return pokemon;
+    }
+  } catch (error) {
+    throw error; 
+  }
+};
+
+export const getPokemonByIdService = async (id: string) => {
+  try {
+    const pokemon:IPokemon | null = await Pokemon.findById(id);
+    if (!pokemon) {
+      throw new Error("Pokemon no encontrado");
+    } else {
+      return pokemon;
+    }
+  } catch (error: any) {
+    throw error;
   }
 };
 
