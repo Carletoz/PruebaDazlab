@@ -15,16 +15,19 @@ export const getPokemonsService = async (): Promise<IPokemon[] | undefined> => {
 
       for (const pokemon of pokemons) {
         const pokemonDetailsResponse = await fetch(pokemon.url);
-        const pokemonDetails = (await pokemonDetailsResponse.json()) as {
-          types: { type: { name: string } }[];
-        };
+        const pokemonDetails: PokemonDetails =
+          (await pokemonDetailsResponse.json()) as any;
         const types = pokemonDetails.types.map(
           (typeInfo) => typeInfo.type.name
         );
 
+        const pokemonImage: string | undefined =
+          pokemonDetails.sprites?.other?.["official-artwork"]?.front_default;
+
         const newPokemon = new Pokemon({
           name: pokemon.name,
           url: pokemon.url,
+          img: pokemonImage,
           type: types,
         });
         await newPokemon.save();
@@ -38,7 +41,22 @@ export const getPokemonsService = async (): Promise<IPokemon[] | undefined> => {
   }
 };
 
-export const getPokemonByNameService = async (name: string): Promise<IPokemon> => {
+export const getPokemonImgService = async (name: string) => {
+  try {
+    const pokemon: IPokemon | null = await Pokemon.findOne({ name });
+    if (!pokemon) {
+      throw new Error("Pokemon no encontrado");
+    }
+    return pokemon.img;
+  } catch (error) {
+    console.error("Error al obtener la imagen del Pokemon:", error);
+    throw error;
+  }
+};
+
+export const getPokemonByNameService = async (
+  name: string
+): Promise<IPokemon> => {
   try {
     const pokemon: IPokemon | null = await Pokemon.findOne({ name });
     if (!pokemon) {
@@ -47,13 +65,13 @@ export const getPokemonByNameService = async (name: string): Promise<IPokemon> =
       return pokemon;
     }
   } catch (error) {
-    throw error; 
+    throw error;
   }
 };
 
 export const getPokemonByIdService = async (id: string) => {
   try {
-    const pokemon:IPokemon | null = await Pokemon.findById(id);
+    const pokemon: IPokemon | null = await Pokemon.findById(id);
     if (!pokemon) {
       throw new Error("Pokemon no encontrado");
     } else {
@@ -97,3 +115,14 @@ export const deletePokemonService = async (id: number) => {
     console.log(error);
   }
 };
+
+interface PokemonDetails {
+  types: { type: { name: string } }[];
+  sprites?: {
+    other?: {
+      "official-artwork"?: {
+        front_default?: string;
+      };
+    };
+  };
+}

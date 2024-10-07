@@ -8,6 +8,7 @@ const PokemonSchema = new Schema({
   name: String,
   type: [String],
   url: String,
+  img: String,
 }, { versionKey: false }); 
 PokemonSchema.plugin(AutoIncrement, { inc_field: '_id' });
 

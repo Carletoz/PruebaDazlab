@@ -4,6 +4,7 @@ import {
   deletePokemonService,
   getPokemonByIdService,
   getPokemonByNameService,
+  getPokemonImgService,
   getPokemonsService,
   updatePokemonService,
 } from "../services/pokemonsService";
@@ -18,14 +19,24 @@ export const getPokemons = async (req: Request, res: Response) => {
   }
 };
 
+export const getPokemonImg = async (req: Request, res: Response) => {
+  try {
+    const { name } = req.params;
+    const pokemon = await getPokemonImgService(name);
+    res.status(200).json(pokemon);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export const getPokemonByName = async (req: Request, res: Response) => {
-    try {
-        const {name} = req.params
-        const pokemon = await getPokemonByNameService(name)
-        res.status(200).json(pokemon)
-    } catch (error:any) {
-        res.status(400).json({message:error.message})
-    }
+  try {
+    const { name } = req.params;
+    const pokemon = await getPokemonByNameService(name);
+    res.status(200).json(pokemon);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
 export const getPokemonById = async (req: Request, res: Response) => {
