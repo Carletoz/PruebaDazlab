@@ -1,11 +1,11 @@
-import Pokedex from './components/pokedex/Pokedex'
+import Pokedex from "./components/pokedex/Pokedex";
 
 const App = () => {
   return (
-    <div > 
+    <div>
       <Pokedex />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

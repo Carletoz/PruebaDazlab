@@ -11,6 +11,19 @@ const Pokedex = () => {
       <div className={styles.screen}>
         <img src={charizard1} alt="charizard1.png" />
       </div>
+
+    <div className={styles.form}>
+        <p>1. INGRESAR UN POKEMON</p>
+        <p>2. SELECCIONAR UN POKEMON</p>
+        <p>3. OBTENER INFORMACION</p>
+    </div>
+
+    <div className={styles.numbers}>
+    {Array.from({ length: 10 }, (_, i) => (
+        <p key={i}>{(i + 1) % 10}</p>
+    ))}
+    </div>
+
     </div>
   );
 };
