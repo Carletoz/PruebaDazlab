@@ -1,5 +1,4 @@
 import pokedex from "../../assets/pokedex.png";
-import styles from "./Pokedex.module.css";
 import enter from "../../assets/enterIcon.png";
 import back from "../../assets/backIcon.png";
 import { useEffect, useState } from "react";
@@ -73,21 +72,21 @@ const Pokedex = () => {
   };
 
   return (
-    <div className={styles.pokedex}>
-      <img src={pokedex} alt="pokedex.png" />
+    <div data-name="pokedex" className="relative">
+      <img src={pokedex} alt="pokedex.png" className="w-screen h-screen object-contain" />
 
-      <div className={styles.screen}>
+      <div data-name="screen" className="absolute top-[29.5%] left-[24.8%] w-[20%] h-[29%] flex justify-center items-center">
         {loading ? (
-          <p>Cargando...</p>
+          <p className="text-white text-base font-bold font-sans">Cargando...</p>
         ) : screenState.notFound ? (
-          <p>No se encontró el Pokémon</p>
+          <p className="text-white text-base font-bold font-sans">No se encontró el Pokémon</p>
         ) : (
-          screenState.img && <img src={screenState.img} alt="Pokemon" />
+          screenState.img && <img src={screenState.img} alt="Pokemon" className="w-full h-full object-contain z-[-100] bg-[#b9d4d4]" />
         )}
-        {loadingMessage && <p>{loadingMessage}</p>}
+        {loadingMessage && <p className="text-white text-base font-bold font-sans">{loadingMessage}</p>}
       </div>
 
-      <div className={styles.form}>
+      <div data-name="form" className="absolute top-[32.5%] left-[56.7%] grid grid-cols-2 grid-rows-3 font-sans text-sm h-max w-[17.5rem] gap-2 p-4 font-bold">
         {preload ? (
           search ? (
             <input
@@ -95,29 +94,34 @@ const Pokedex = () => {
               placeholder="Nombre del Pokemon"
               value={pokemonName}
               onChange={handleInputChange}
+              className="bg-white border-b border-white text-black text-sm font-bold font-sans cursor-pointer rounded-md w-max hover:border-blue-500 focus:outline-none focus:border-none pl-2"
             />
           ) : (
-            <button onClick={handleSearch}>Buscar Pokemon</button>
+            <button onClick={handleSearch} className="bg-transparent border-none text-white text-sm font-bold font-sans cursor-pointer rounded-md hover:bg-white hover:text-black transition duration-200 ease-in-out">
+              Buscar Pokemon
+            </button>
           )
         ) : (
-          <button onClick={handlePreload}>Cargar Pokemons</button>
+          <button onClick={handlePreload} className="bg-transparent border-none text-white text-sm font-bold font-sans cursor-pointer rounded-md hover:bg-white hover:text-black transition duration-200 ease-in-out">
+            Cargar Pokemons
+          </button>
         )}
       </div>
 
-      <div className={styles.numbers}>
+      <div data-name="numbers" className="absolute top-[23rem] left-[55.3rem] grid grid-cols-5 grid-rows-2 gap-x-2 gap-y-1">
         {Array.from({ length: 10 }, (_, i) => (
-          <button key={i}>
-            <p>{(i + 1) % 10}</p>
+          <button key={i} className="bg-transparent text-yellow-400 cursor-pointer h-[2.5rem] w-[3rem] border-none hover:text-blue-500 transform hover:scale-110 hover:rotate-5 transition-transform duration-300 ease-in-out">
+            <p className="m-0 p-0">{(i + 1) % 10}</p>
           </button>
         ))}
       </div>
 
-      <div className={styles.buttons}>
-        <button onClick={handleBackClick}>
-          <img src={back} alt="back.png" />
+      <div data-name="buttons" className="absolute flex flex-row top-[72%] left-[57.4%] w-[7rem] h-[2.1rem] gap-4">
+        <button onClick={handleBackClick} className="bg-transparent border-none cursor-pointer w-full h-full">
+          <img src={back} alt="back.png" className="w-full h-full hover:opacity-80 transform hover:scale-110 transition-transform duration-300 ease-in-out" />
         </button>
-        <button onClick={handleEnterClick}>
-          <img src={enter} alt="enter.png" />
+        <button onClick={handleEnterClick} className="bg-transparent border-none cursor-pointer w-full h-full">
+          <img src={enter} alt="enter.png" className="w-full h-full hover:opacity-80 transform hover:scale-110 transition-transform duration-300 ease-in-out" />
         </button>
       </div>
     </div>
