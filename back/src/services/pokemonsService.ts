@@ -15,10 +15,10 @@ export const getPokemonsService = async (): Promise<IPokemon[] | undefined> => {
 
       for (const pokemon of pokemons) {
         const pokemonDetailsResponse = await fetch(pokemon.url);
-        const pokemonDetails: PokemonDetails =
-          (await pokemonDetailsResponse.json()) as any;
+        const pokemonDetails: any =
+          (await pokemonDetailsResponse.json()) ;
         const types = pokemonDetails.types.map(
-          (typeInfo) => typeInfo.type.name
+          (typeInfo: any) => typeInfo.type.name
         );
 
         const pokemonImage: string | undefined =
@@ -137,13 +137,14 @@ export const deletePokemonService = async (id: number) => {
   }
 };
 
-interface PokemonDetails {
-  types: { type: { name: string } }[];
-  sprites?: {
-    other?: {
-      "official-artwork"?: {
-        front_default?: string;
-      };
-    };
-  };
-}
+// interface PokemonDetails {
+//     types: { type: { name: string } }[];
+//     sprites?: {
+//       other?: {
+//         "official-artwork"?: {
+//           front_default?: string;
+//         };
+//       };
+//     };
+//   }
+  
