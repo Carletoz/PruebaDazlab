@@ -36,7 +36,7 @@ Bienvenido a esta app hecha por mi que simula el funcionamiento de una pokedex c
 
 RECOMENDACION: en el navegador si tienes la barra de favoritos desactivada, activala para una experiencia optima.
 
-<span style="color: yellow;">ADVERTENCIA: Al clickear por primera vez en "Cargar Pokemons" se mostrara un mensaje que dice "Cargando.." esto puede tarda unos minutos ya que se estara haciendo una llamada a la API y se guardaran en la BD</span>
+<span style="color: yellow;">ADVERTENCIA: Al clickear por primera vez en "Cargar Pokemons" se mostrara un mensaje que dice "Cargando.." esto puede tarda unos minutos ya que se estara haciendo una llamada a la API y se guardaran en la BD, una vez que diga "Pokemos cargados con exito" ya puedes usar la pokedex</span>
 
 - El usuario interactuara con la pokedex mediante botones que se mostraran en la pantalla de la derecha
 
