@@ -7,20 +7,33 @@ const Pokedex = () => {
   const [preload, setPreload] = useState(false);
   const [search, setSearch] = useState(false);
   const [pokemonName, setPokemonName] = useState("");
-  const [screenState, setScreenState] = useState({ img: "", notFound: false, message: "" });
+  const [pokemonImage, setPokemonImage] = useState("");
+  const [screenState, setScreenState] = useState({
+    img: "",
+    notFound: false,
+    message: "",
+  });
   const [loading, setLoading] = useState(false);
   const [pokemonList, setPokemonList] = useState([]);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [register, setRegister] = useState(false);
   const [registerName, setRegisterName] = useState("");
   const [registerType, setRegisterType] = useState("");
+  const [modify, setModify] = useState(false);
+  const [modifyType, setModifyType] = useState("");
+  const [deleteName, setDeleteName] = useState("");
+  const [deleteMode, setDeleteMode] = useState(false);
 
   const handlePreload = async () => {
     setPreload(true);
     setLoadingMessage("Cargando...");
     await preloadData();
-    setLoadingMessage(""); // Limpiar el mensaje después de cargar
-    setScreenState({ img: "", notFound: false, message: "Pokemons cargados con éxito" }); // Mostrar mensaje de éxito
+    setLoadingMessage("");
+    setScreenState({
+      img: "",
+      notFound: false,
+      message: "Pokemons cargados con éxito",
+    });
   };
 
   const handleSearch = () => {
@@ -29,6 +42,55 @@ const Pokedex = () => {
 
   const handleRegister = () => {
     setRegister(true);
+  };
+
+  const handleModify = () => {
+    setModify(true);
+  };
+
+  const handleDelete = () => {
+    setDeleteMode(true);
+  };
+
+  const handleDeleteInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDeleteName(event.target.value);
+  };
+
+  const handleDeleteSubmit = async () => {
+    if (deleteName.trim()) {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/pokemon/${deleteName.trim()}`,
+          {
+            method: "DELETE",
+          }
+        );
+        if (response.ok) {
+          console.log("Pokémon eliminado con éxito");
+          setDeleteName("");
+          setScreenState({
+            img: "",
+            notFound: false,
+            message: "Pokemon Eliminado",
+          });
+        } else {
+          console.error("Error al eliminar el Pokémon");
+          setScreenState({
+            img: "",
+            notFound: true,
+            message: "No se encontró Pokémon",
+          });  
+        }
+      } catch (error) {
+        console.error("Error en la solicitud de eliminación:", error);
+      }
+    } else {
+      console.log(
+        "Por favor ingresa un nombre de Pokémon válido para eliminar"
+      );
+    }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +111,10 @@ const Pokedex = () => {
     setSearch(false);
     setPokemonName("");
     setRegister(false);
+    setModify(false);
     setScreenState({ img: "", notFound: false, message: "" });
+    setDeleteMode(false);
+    setDeleteName("");
   };
 
   const preloadData = async () => {
@@ -67,20 +132,19 @@ const Pokedex = () => {
     try {
       const response = await fetch(`http://localhost:3001/pokemon/img/${name}`);
       if (!response.ok) {
-        setScreenState({ img: "", notFound: true, message: ""    });
+        setScreenState({ img: "", notFound: true, message: "" });
         setLoading(false);
         return;
       }
       const imgUrl = await response.json();
-      setScreenState({ img: imgUrl, notFound: false, message: ""     });
+      setScreenState({ img: imgUrl, notFound: false, message: "" });
     } catch (error) {
       console.error("Error fetching data:", error);
       setScreenState({ img: "", notFound: true, message: "" });
     }
     setLoading(false);
   };
-
-  // Función para manejar el cambio de los inputs de registro
+ 
   const handleRegisterInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     field: string
@@ -91,8 +155,7 @@ const Pokedex = () => {
       setRegisterType(event.target.value);
     }
   };
-
-  // Función para manejar el registro del Pokémon
+ 
   const handleRegisterSubmit = async () => {
     if (registerName.trim() && registerType.trim()) {
       try {
@@ -111,10 +174,18 @@ const Pokedex = () => {
           setRegister(false);
           setRegisterName("");
           setRegisterType("");
-          setScreenState({ img: "", notFound: false, message: "Pokemon Registrado" });
+          setScreenState({
+            img: "",
+            notFound: false,
+            message: "Pokemon Registrado",
+          });
         } else {
-          setScreenState({ img: "", notFound: false, message: "No se encontro el pokemon" });
-          setLoadingMessage(""); // Limpiar el mensaje de carga aquí también
+          setScreenState({
+            img: "",
+            notFound: false,
+            message: "No se encontro el pokemon",
+          });
+          setLoadingMessage("");  
           console.error("Error al registrar el Pokémon");
         }
       } catch (error) {
@@ -128,6 +199,67 @@ const Pokedex = () => {
   const handleButtonClick = () => {
     handleEnterClick();
     handleRegisterSubmit();
+    handleDeleteSubmit();
+    handleUpdate();
+  };
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPokemonName(event.target.value);
+  };
+
+  const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setModifyType(event.target.value);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(
+        `http://localhost:3001/pokemon/name/${pokemonName}`
+      );
+      const data = await response.json();
+      setPokemonImage(data.img);
+      if (data.img) {
+        setScreenState({ img: data.img, notFound: false, message: "" });
+      }
+    } catch (error) {
+      console.error("Error fetching Pokémon data:", error);
+    }
+  };
+
+  const handleUpdate = async () => {
+    if (screenState.img && modifyType.trim()) {
+      // Verifica que haya una imagen y que el tipo a modificar no esté vacío
+      try {
+        const response = await fetch("http://localhost:3001/pokemon/update", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: pokemonName.trim(),
+            type: [modifyType.trim()],
+          }),
+        });
+        if (response.ok) {
+          console.log("Tipo de Pokémon modificado con éxito");
+          setModifyType("");
+          setScreenState({
+            img: "",
+            notFound: false,
+            message: "Tipo modificado",
+          });
+        } else {
+          console.error("Error al modificar el tipo del Pokémon");
+        }
+      } catch (error) {
+        console.error("Error en la solicitud de modificación:", error);
+      }
+    } else {
+      console.log(
+        "Por favor asegúrate de que el Pokémon esté mostrado y que el tipo a modificar no esté vacío"
+      );
+    }
   };
 
   return (
@@ -200,6 +332,37 @@ const Pokedex = () => {
                 className="bg-white border-b border-white text-black text-sm font-bold font-sans cursor-pointer rounded-md w-[10rem] hover:border-blue-500 focus:outline-none focus:border-none pl-2"
               />
             </div>
+          ) : modify ? (
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Nombre del Pokemon"
+                value={pokemonName}
+                onChange={handleNameChange}
+                className="bg-white border-b border-white text-black text-bas font-bold font-sans cursor-pointer rounded-md w-[10rem] hover:border-blue-500 focus:outline-none focus:border-none pl-2"
+              />
+              {screenState.img && (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Tipo a modificar"
+                    value={modifyType}
+                    onChange={handleTypeChange}
+                    className="bg-white border-b border-white text-black text-bas font-bold font-sans cursor-pointer rounded-md w-[10rem] hover:border-blue-500 focus:outline-none focus:border-none pl-2 mt-2"
+                  /> 
+                </>
+              )}
+            </form>
+          ) : deleteMode ? (
+            <div>
+              <input
+                type="text"
+                placeholder="Pokemon a eliminar"
+                value={deleteName}
+                onChange={handleDeleteInputChange}
+                className="bg-white border-b border-white text-black text-sm font-bold font-sans cursor-pointer rounded-md w-[9.5rem] hover:border-blue-500 focus:outline-none focus:border-none pl-2 mb-2"
+              />
+            </div>
           ) : (
             <>
               <button
@@ -214,10 +377,16 @@ const Pokedex = () => {
               >
                 Registrar Pokemon
               </button>
-              <button className="bg-transparent border-none text-white text-sm font-bold font-sans cursor-pointer rounded-md hover:bg-white hover:text-black transition duration-200 ease-in-out">
+              <button
+                onClick={handleDelete}
+                className="bg-transparent border-none text-white text-sm font-bold font-sans cursor-pointer rounded-md hover:bg-white hover:text-black transition duration-200 ease-in-out"
+              >
                 Eliminar Pokemon
               </button>
-              <button className="bg-transparent border-none text-white text-sm font-bold font-sans cursor-pointer rounded-md hover:bg-white hover:text-black transition duration-200 ease-in-out">
+              <button
+                onClick={handleModify}
+                className="bg-transparent border-none text-white text-sm font-bold font-sans cursor-pointer rounded-md hover:bg-white hover:text-black transition duration-200 ease-in-out"
+              >
                 Modificar Pokemon
               </button>
             </>
@@ -231,14 +400,7 @@ const Pokedex = () => {
           </button>
         )}
       </div>
-
-      {/* <div data-name="numbers" className="absolute top-[23rem] left-[55.3rem] grid grid-cols-5 grid-rows-2 gap-x-2 gap-y-1">
-        {Array.from({ length: 10 }, (_, i) => (
-          <button key={i} className="bg-transparent text-yellow-400 cursor-pointer h-[2.5rem] w-[3rem] border-none hover:text-blue-500 transform hover:scale-110 hover:rotate-5 transition-transform duration-300 ease-in-out">
-            <p className="m-0 p-0">{(i + 1) % 10}</p>
-          </button>
-        ))}
-      </div> */}
+ 
 
       <div
         data-name="buttons"
