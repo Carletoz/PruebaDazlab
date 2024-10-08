@@ -131,4 +131,19 @@
   height: 100%;
 }
 
-
+.typeDisplay{
+    position: absolute;
+    top: 82.5vh;
+    left: 27vw;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: bold;
+    font-family: "Afacad Flux", sans-serif;
+    width: 9.5vw;
+    height: 9.5vh;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}

@@ -23,6 +23,7 @@ const Pokedex = () => {
   const [modifyType, setModifyType] = useState("");
   const [deleteName, setDeleteName] = useState("");
   const [deleteMode, setDeleteMode] = useState(false);
+  const [pokemonType, setPokemonType] = useState([]);
 
   const handlePreload = async () => {
     setPreload(true);
@@ -115,6 +116,7 @@ const Pokedex = () => {
     setScreenState({ img: "", notFound: false, message: "" });
     setDeleteMode(false);
     setDeleteName("");
+    setPokemonType([]);
   };
 
   const preloadData = async () => {
@@ -138,6 +140,7 @@ const Pokedex = () => {
       }
       const imgUrl = await response.json();
       setScreenState({ img: imgUrl, notFound: false, message: "" });
+      fetchTypes(name);
     } catch (error) {
       console.error("Error fetching data:", error);
       setScreenState({ img: "", notFound: true, message: "" });
@@ -145,6 +148,17 @@ const Pokedex = () => {
     setLoading(false);
   };
  
+  const fetchTypes = async (name: string) => {
+    try {
+        const response = await fetch(`http://localhost:3001/pokemon/name/${name}`);
+        const data = await response.json();
+        const types = data.type;
+        setPokemonType(types);
+    } catch (error) {
+        console.error("Error fetching types:", error);
+    }
+    }
+
   const handleRegisterInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     field: string
@@ -272,7 +286,7 @@ const Pokedex = () => {
 
       <div
         data-name="screen"
-        className="absolute top-[29.5%] left-[24.8%] w-[20%] h-[29%] flex justify-center items-center"
+        className="absolute top-[29.5%] left-[24.8%] w-[20%] h-[30%] flex justify-center items-center"
       >
         {loading ? (
           <p className="text-white text-base font-bold font-sans">
@@ -301,6 +315,14 @@ const Pokedex = () => {
           </p>
         )}
       </div>
+
+        <div data-name="typeDisplay" className="absolute top-[82.5vh] left-[27vw] flex flex-col text-white text-[1.4rem] font-bold font-sans w-[9.5vw] h-[9.5vh] justify-center items-center">
+        {pokemonType.map((type, index) => (
+          <p key={index} className="text-white text-b font-bold font-Afacad Flux">
+            {type}
+          </p>
+        ))}
+        </div>
 
       <div
         data-name="form"
