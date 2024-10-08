@@ -51,11 +51,11 @@ export const getPokemonById = async (req: Request, res: Response) => {
 
 export const createPokemon = async (req: Request, res: Response) => {
   try {
-    const { name, url, type } = req.body;
-    const pokemon = await createPokemonService({ name, url, type });
+    const { name, type } = req.body;
+    const pokemon = await createPokemonService({ name, type });
     res.status(200).json(pokemon);
-  } catch (error) {
-    res.status(400).json({ message: "Algo fallo al crear el pokemon" });
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
   }
 };
 

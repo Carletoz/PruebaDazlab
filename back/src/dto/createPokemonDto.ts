@@ -1,7 +1,7 @@
 interface CreatePokemonDto {
   name: string;
   type: string[];
-  url: string;
+  url?: string;
 }
 
 export default CreatePokemonDto;

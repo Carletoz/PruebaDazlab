@@ -9,9 +9,9 @@ export const getPokemonsService = async (): Promise<IPokemon[] | undefined> => {
     if (pokemonsDB.length > 0) {
       return pokemonsDB as IPokemon[];
     } else {
-      const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=6");
+      const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
       const data = (await response.json()) as { results: any[] };
-      const pokemons = data.results; 
+      const pokemons = data.results;
 
       for (const pokemon of pokemons) {
         const pokemonDetailsResponse = await fetch(pokemon.url);
@@ -84,14 +84,35 @@ export const getPokemonByIdService = async (id: string) => {
 
 export const createPokemonService = async (pokemon: CreatePokemonDto) => {
   try {
-    if (pokemon.name && pokemon.url && pokemon.type) {
-      const newPokemon = await Pokemon.create(pokemon);
-      return newPokemon;
-    } else {
-      throw new Error("Todos los campos son requeridos");
+    const { name, type } = pokemon;
+    if (!name || !type) {
+      throw new Error("Name and type are required");
     }
-  } catch (error: any) {
-    return { error: error.message };
+
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    if (response.status !== 200) {
+      throw new Error("Pokemon no encontrado");
+    }
+
+    const data: any = await response.json();
+    const pokemonImage: string | undefined =
+      data.sprites?.other?.["official-artwork"]?.front_default;
+
+    if (!pokemonImage) {
+      throw new Error("Pokemon no encontrado");
+    }
+
+    const newPokemon = new Pokemon({        
+      name,
+      type,
+      url: `https://pokeapi.co/api/v2/pokemon/${name}`,
+      img: pokemonImage
+    });
+    await newPokemon.save();
+
+    return newPokemon
+  } catch (error) {
+    throw error;
   }
 };
 
