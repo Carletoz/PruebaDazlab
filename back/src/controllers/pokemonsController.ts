@@ -8,9 +8,18 @@ import {
   getPokemonsService,
   updatePokemonService,
 } from "../services/pokemonsService";
-import Pokemon from "../models/Pokemon";
-import IPokemon from "../interfaces/Ipokemon";
 
+/**
+ * @swagger
+ * /pokemon:
+ *   get:
+ *     summary: Obtiene todos los Pokémon
+ *     responses:
+ *       200:
+ *         description: Lista de Pokémon
+ *       400:
+ *         description: Error al obtener los Pokémon
+ */
 export const getPokemons = async (req: Request, res: Response) => {
   try {
     const pokemons = await getPokemonsService();
@@ -20,6 +29,24 @@ export const getPokemons = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /pokemon/img/{name}:
+ *   get:
+ *     summary: Obtiene la imagen de un Pokémon por nombre
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         required: true
+ *         description: Nombre del Pokémon
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Imagen del Pokémon
+ *       400:
+ *         description: Error al obtener la imagen del Pokémon
+ */
 export const getPokemonImg = async (req: Request, res: Response) => {
   try {
     const { name } = req.params;
@@ -30,6 +57,24 @@ export const getPokemonImg = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /pokemon/name/{name}:
+ *   get:
+ *     summary: Obtiene detalles de un Pokémon por nombre
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         required: true
+ *         description: Nombre del Pokémon
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Detalles del Pokémon
+ *       400:
+ *         description: Error al obtener el Pokémon
+ */
 export const getPokemonByName = async (req: Request, res: Response) => {
   try {
     const { name } = req.params;
@@ -40,6 +85,24 @@ export const getPokemonByName = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /pokemon/{id}:
+ *   get:
+ *     summary: Obtiene detalles un Pokémon por ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del Pokémon
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Detalles del Pokémon
+ *       400:
+ *         description: Error al obtener el Pokémon
+ */
 export const getPokemonById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -50,6 +113,31 @@ export const getPokemonById = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /pokemon:
+ *   post:
+ *     summary: Crea un nuevo Pokémon
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *             example:
+ *              name: "nombreDePokemon"
+ *              type: "tipoDePokemon"
+ *     responses:
+ *       200:
+ *         description: Pokémon creado
+ *       400:
+ *         description: Error al crear el Pokémon
+ */
 export const createPokemon = async (req: Request, res: Response) => {
   try {
     const { name, type } = req.body;
@@ -60,6 +148,28 @@ export const createPokemon = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /pokemon/update:
+ *   put:
+ *     summary: Actualiza un Pokémon existente
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Pokémon actualizado
+ *       400:
+ *         description: Error al actualizar el Pokémon
+ */
 export const updatePokemon = async (req: Request, res: Response) => {
   try {
     const { name, type } = req.body;
@@ -70,6 +180,24 @@ export const updatePokemon = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @swagger
+ * /pokemon/{name}:
+ *   delete:
+ *     summary: Elimina un Pokémon por nombre
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         required: true
+ *         description: Nombre del Pokémon
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Pokémon eliminado correctamente
+ *       400:
+ *         description: Error al eliminar el Pokémon
+ */
 export const deletePokemon = async (req: Request, res: Response) => {
   try {
     const { name } = req.params;
