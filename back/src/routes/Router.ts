@@ -8,8 +8,8 @@ router.get("/pokemon/img/:name", getPokemonImg)
 router.get("/pokemon/name/:name", getPokemonByName)
 router.get("/pokemon/:id", getPokemonById)
 router.post("/pokemon",createPokemon)
-router.put("/pokemon/:id",updatePokemon)
-router.delete("/pokemon/:id",deletePokemon)
+router.put("/pokemon/update",updatePokemon)
+router.delete("/pokemon/:name",deletePokemon)
 
 
 export default router;

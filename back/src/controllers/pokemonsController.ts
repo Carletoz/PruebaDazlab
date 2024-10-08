@@ -9,6 +9,7 @@ import {
   updatePokemonService,
 } from "../services/pokemonsService";
 import Pokemon from "../models/Pokemon";
+import IPokemon from "../interfaces/Ipokemon";
 
 export const getPokemons = async (req: Request, res: Response) => {
   try {
@@ -61,23 +62,20 @@ export const createPokemon = async (req: Request, res: Response) => {
 
 export const updatePokemon = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const { name, url, type } = req.body;
-    const pokemon = await updatePokemonService(id, { name, url, type });
+    const { name, type } = req.body;
+    const pokemon = await updatePokemonService(name, type);
     res.status(200).json(pokemon);
-  } catch (error) {
-    res
-      .status(400)
-      .json({ message: "Algo salio mal al actualizar el pokemon" });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
   }
 };
 
 export const deletePokemon = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    await deletePokemonService(Number(id));
+    const { name } = req.params;
+    await deletePokemonService(name);
     res.status(200).json({ message: "Pokemon eliminado correctamente" });
-  } catch (error) {
-    res.status(400).json({ message: "Algo salio mal " });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
   }
 };

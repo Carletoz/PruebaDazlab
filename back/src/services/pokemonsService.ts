@@ -9,14 +9,15 @@ export const getPokemonsService = async (): Promise<IPokemon[] | undefined> => {
     if (pokemonsDB.length > 0) {
       return pokemonsDB as IPokemon[];
     } else {
-      const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+      const response = await fetch(
+        "https://pokeapi.co/api/v2/pokemon?limit=151"
+      );
       const data = (await response.json()) as { results: any[] };
       const pokemons = data.results;
 
       for (const pokemon of pokemons) {
         const pokemonDetailsResponse = await fetch(pokemon.url);
-        const pokemonDetails: any =
-          (await pokemonDetailsResponse.json()) ;
+        const pokemonDetails: any = await pokemonDetailsResponse.json();
         const types = pokemonDetails.types.map(
           (typeInfo: any) => typeInfo.type.name
         );
@@ -102,38 +103,44 @@ export const createPokemonService = async (pokemon: CreatePokemonDto) => {
       throw new Error("Pokemon no encontrado");
     }
 
-    const newPokemon = new Pokemon({        
+    const newPokemon = new Pokemon({
       name,
       type,
       url: `https://pokeapi.co/api/v2/pokemon/${name}`,
-      img: pokemonImage
+      img: pokemonImage,
     });
     await newPokemon.save();
 
-    return newPokemon
+    return newPokemon;
   } catch (error) {
     throw error;
   }
 };
 
-export const updatePokemonService = async (
-  id: string,
-  pokemon: CreatePokemonDto
-) => {
+export const updatePokemonService = async (name: string, type: string[])=> {
   try {
-    const results = await Pokemon.findByIdAndUpdate(id, pokemon);
-    return results;
+    if (!name || !type) {
+      throw new Error("Name and type are required");
+    }
+    const updatedPokemon = await Pokemon.findOneAndUpdate({ name },{ type },{ new: true });
+    if (!updatedPokemon) {
+      throw new Error("Pokemon no encontrado");
+    }
+    return updatedPokemon;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
-export const deletePokemonService = async (id: number) => {
+export const deletePokemonService = async (name: string) => {
   try {
-    const results = await Pokemon.findByIdAndDelete(id);
+    const results = await Pokemon.findOneAndDelete({ name });
+    if (!results) {
+      throw new Error("Pokemon no encontrado");
+    }
     return results;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
@@ -147,4 +154,3 @@ export const deletePokemonService = async (id: number) => {
 //       };
 //     };
 //   }
-  
