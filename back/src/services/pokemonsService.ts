@@ -10,7 +10,7 @@ export const getPokemonsService = async (): Promise<IPokemon[] | undefined> => {
       return pokemonsDB as IPokemon[];
     } else {
       const response = await fetch(
-        "https://pokeapi.co/api/v2/pokemon?limit=151"
+        "https://pokeapi.co/api/v2/pokemon?limit=10"
       );
       const data = (await response.json()) as { results: any[] };
       const pokemons = data.results;

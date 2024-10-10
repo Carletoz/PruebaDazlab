@@ -1,20 +1,18 @@
 import pokedex from "../../assets/pokedex.png";
 import enter from "../../assets/enterIcon.png";
 import back from "../../assets/backIcon.png";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 
 const Pokedex = () => {
   const [preload, setPreload] = useState(false);
   const [search, setSearch] = useState(false);
   const [pokemonName, setPokemonName] = useState("");
-  const [pokemonImage, setPokemonImage] = useState("");
   const [screenState, setScreenState] = useState({
     img: "",
     notFound: false,
     message: "",
   });
   const [loading, setLoading] = useState(false);
-  const [pokemonList, setPokemonList] = useState([]);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [register, setRegister] = useState(false);
   const [registerName, setRegisterName] = useState("");
@@ -37,6 +35,7 @@ const Pokedex = () => {
     });
   };
 
+
   const handleSearch = () => {
     setSearch(true);
   };
@@ -58,6 +57,7 @@ const Pokedex = () => {
   ) => {
     setDeleteName(event.target.value);
   };
+
 
   const handleDeleteSubmit = async () => {
     if (deleteName.trim()) {
@@ -123,7 +123,7 @@ const Pokedex = () => {
     try {
       const response = await fetch("http://localhost:3001/pokemon");
       const data = await response.json();
-      setPokemonList(data);
+      // Asegúrate de manejar la lista de Pokémon si es necesario
     } catch (error) {
       console.error("Error al cargar la lista de Pokémon:", error);
     }
@@ -147,17 +147,19 @@ const Pokedex = () => {
     }
     setLoading(false);
   };
- 
+
   const fetchTypes = async (name: string) => {
     try {
-        const response = await fetch(`http://localhost:3001/pokemon/name/${name}`);
-        const data = await response.json();
-        const types = data.type;
-        setPokemonType(types);
+      const response = await fetch(
+        `http://localhost:3001/pokemon/name/${name}`
+      );
+      const data = await response.json();
+      const types = data.type;
+      setPokemonType(types);
     } catch (error) {
-        console.error("Error fetching types:", error);
+      console.error("Error fetching types:", error);
     }
-    }
+  };
 
   const handleRegisterInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -169,7 +171,7 @@ const Pokedex = () => {
       setRegisterType(event.target.value);
     }
   };
- 
+
   const handleRegisterSubmit = async () => {
     if (registerName.trim() && registerType.trim()) {
       try {
@@ -225,25 +227,8 @@ const Pokedex = () => {
     setModifyType(event.target.value);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    try {
-      const response = await fetch(
-        `http://localhost:3001/pokemon/name/${pokemonName}`
-      );
-      const data = await response.json();
-      setPokemonImage(data.img);
-      if (data.img) {
-        setScreenState({ img: data.img, notFound: false, message: "" });
-      }
-    } catch (error) {
-      console.error("Error fetching Pokémon data:", error);
-    }
-  };
-
   const handleUpdate = async () => {
     if (screenState.img && modifyType.trim()) {
-      // Verifica que haya una imagen y que el tipo a modificar no esté vacío
       try {
         const response = await fetch("http://localhost:3001/pokemon/update", {
           method: "PUT",
@@ -296,7 +281,7 @@ const Pokedex = () => {
           <p className="text-white text-base font-bold font-sans">
             No se encontró el Pokémon
           </p>
-        ) : screenState.message ? ( // Mostrar mensaje de éxito
+        ) : screenState.message ? (
           <p className="text-white text-base font-bold font-sans">
             {screenState.message}
           </p>
@@ -316,13 +301,16 @@ const Pokedex = () => {
         )}
       </div>
 
-        <div data-name="typeDisplay" className="absolute top-[82.5vh] left-[27vw] flex flex-col text-white text-[1.4rem] font-bold font-sans w-[9.5vw] h-[9.5vh] justify-center items-center">
+      <div
+        data-name="typeDisplay"
+        className="absolute top-[82.5vh] left-[27vw] flex flex-col text-white text-[1.4rem] font-bold font-sans w-[9.5vw] h-[9.5vh] justify-center items-center"
+      >
         {pokemonType.map((type, index) => (
           <p key={index} className="text-white text-b font-bold font-Afacad Flux">
             {type}
           </p>
         ))}
-        </div>
+      </div>
 
       <div
         data-name="form"
@@ -355,7 +343,7 @@ const Pokedex = () => {
               />
             </div>
           ) : modify ? (
-            <form onSubmit={handleSubmit}>
+            <form>
               <input
                 type="text"
                 placeholder="Nombre del Pokemon"
@@ -371,7 +359,7 @@ const Pokedex = () => {
                     value={modifyType}
                     onChange={handleTypeChange}
                     className="bg-white border-b border-white text-black text-bas font-bold font-sans cursor-pointer rounded-md w-[10rem] hover:border-blue-500 focus:outline-none focus:border-none pl-2 mt-2"
-                  /> 
+                  />
                 </>
               )}
             </form>
@@ -422,7 +410,6 @@ const Pokedex = () => {
           </button>
         )}
       </div>
- 
 
       <div
         data-name="buttons"
@@ -452,5 +439,6 @@ const Pokedex = () => {
     </div>
   );
 };
+
 
 export default Pokedex;
