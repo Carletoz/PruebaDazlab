@@ -44,4 +44,4 @@ RECOMENDACION: en el navegador si tienes la barra de favoritos desactivada, acti
 
 - la pantalla de la izquierda solo sera de lectura y mostrara infomracion dependiendo de lo que haga el usuario 
 
-RECOMENDACION: ingresar nombre de pokemons reales para que puedas ver su imagen en la pantalla izquierda
+RECOMENDACION: ingresar nombre de pokemons reales y en "minuscula" para que puedas ver su imagen en la pantalla izquierda
