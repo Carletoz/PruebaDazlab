@@ -24,6 +24,8 @@ const Pokedex = () => {
   const [deleteMode, setDeleteMode] = useState(false);
   const [pokemonType, setPokemonType] = useState([]);
 
+  const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
+
   const handlePreload = async () => {
     setPreload(true);
     setLoadingMessage("Cargando...");
@@ -64,7 +66,7 @@ const Pokedex = () => {
     if (deleteName.trim()) {
       try {
         const response = await fetch(
-          `http://localhost:3001/pokemon/${deleteName.trim()}`,
+          `${API_URL}/pokemon/${deleteName.trim()}`,
           {
             method: "DELETE",
           }
@@ -122,7 +124,7 @@ const Pokedex = () => {
 
   const preloadData = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/pokemon`);
+      const response = await fetch(`${API_URL}/pokemon`);
       const data = await response.json();  
       
       const pokemonCount = data.length; 
@@ -138,7 +140,7 @@ const Pokedex = () => {
   const fetchData = async (name: string) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/pokemon/img/${name}`);
+      const response = await fetch(`${API_URL}/pokemon/img/${name}`);
       if (!response.ok) {
         setScreenState({ img: "", notFound: true, message: "" });
         setLoading(false);
@@ -156,7 +158,7 @@ const Pokedex = () => {
 
   const fetchTypes = async (name: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/pokemon/name/${name}`);
+      const response = await fetch(`${API_URL}/pokemon/name/${name}`);
       const data = await response.json();
       const types = data.type;
       setPokemonType(types);
@@ -179,7 +181,7 @@ const Pokedex = () => {
   const handleRegisterSubmit = async () => {
     if (registerName.trim() && registerType.trim()) {
       try {
-        const response = await fetch(`http://localhost:3001/pokemon`, {
+        const response = await fetch(`${API_URL}/pokemon`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -234,7 +236,7 @@ const Pokedex = () => {
   const handleUpdate = async () => {
     if (screenState.img && modifyType.trim()) {
       try {
-        const response = await fetch(`http://localhost:3001/pokemon/update`, {
+        const response = await fetch(`${API_URL}/pokemon/update`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
