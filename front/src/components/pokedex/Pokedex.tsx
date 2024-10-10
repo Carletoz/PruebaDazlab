@@ -3,6 +3,7 @@ import enter from "../../assets/enterIcon.png";
 import back from "../../assets/backIcon.png";
 import {useState } from "react";
 
+
 const Pokedex = () => {
   const [preload, setPreload] = useState(false);
   const [search, setSearch] = useState(false);
