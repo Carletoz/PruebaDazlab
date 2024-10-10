@@ -122,9 +122,14 @@ const Pokedex = () => {
 
   const preloadData = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon`);
-      const data = await response.json();
-      // Asegúrate de manejar la lista de Pokémon si es necesario
+      const response = await fetch(`http://localhost:3001/pokemon`);
+      const data = await response.json();  
+      
+      const pokemonCount = data.length; // Almacenar la cantidad de Pokémon en una variable
+      
+      // Utilizar 'pokemonCount' para actualizar un estado o variable
+      document.title = `Pokédex - ${pokemonCount} Pokémon disponibles`;
+      
     } catch (error) {
       console.error("Error al cargar la lista de Pokémon:", error);
     }
@@ -133,7 +138,7 @@ const Pokedex = () => {
   const fetchData = async (name: string) => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon/img/${name}`);
+      const response = await fetch(`http://localhost:3001/pokemon/img/${name}`);
       if (!response.ok) {
         setScreenState({ img: "", notFound: true, message: "" });
         setLoading(false);
@@ -151,7 +156,7 @@ const Pokedex = () => {
 
   const fetchTypes = async (name: string) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon/name/${name}`);
+      const response = await fetch(`http://localhost:3001/pokemon/name/${name}`);
       const data = await response.json();
       const types = data.type;
       setPokemonType(types);
@@ -174,7 +179,7 @@ const Pokedex = () => {
   const handleRegisterSubmit = async () => {
     if (registerName.trim() && registerType.trim()) {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon`, {
+        const response = await fetch(`http://localhost:3001/pokemon`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -229,7 +234,7 @@ const Pokedex = () => {
   const handleUpdate = async () => {
     if (screenState.img && modifyType.trim()) {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pokemon/update`, {
+        const response = await fetch(`http://localhost:3001/pokemon/update`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
