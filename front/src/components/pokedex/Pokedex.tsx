@@ -125,9 +125,9 @@ const Pokedex = () => {
       const response = await fetch(`http://localhost:3001/pokemon`);
       const data = await response.json();  
       
-      const pokemonCount = data.length; // Almacenar la cantidad de Pokémon en una variable
+      const pokemonCount = data.length; 
       
-      // Utilizar 'pokemonCount' para actualizar un estado o variable
+   
       document.title = `Pokédex - ${pokemonCount} Pokémon disponibles`;
       
     } catch (error) {
